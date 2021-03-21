@@ -88,8 +88,18 @@ int main()
 		GL_STATIC_DRAW /* How we want graphics card to manage the data */
 	);
 
-	/** VERTEX SHADER **/
+	/* Linking Vertex Attributes */
+	glVertexAttribPointer(0, /* layout (location=0) in Vertex shader */
+		3,			/* vec3 in vertex shader */
+		GL_FLOAT,	/* vec* in GLSL is a float */
+		GL_FALSE,	/* Normalize? not required for float, only for int*/
+		3 * sizeof(float), /* stride (space between consecutive vertex attributes) */
+		(void*)0 /* offset of where the position data begins in buffer */
+	);
+	glEnableVertexAttribArray(0 /* vertex attribute location */
+	);
 
+	/** VERTEX SHADER **/
 	/* Code Source */
 	const char* vertexShaderSource = "#version 330 core\n"
 		"layout(location = 0) in vec3 aPos; \n"
@@ -162,7 +172,6 @@ int main()
 	}
 
 	/** SHADER PROGRAM **/
-
 	/* Create a Shader program object */
 	unsigned int shaderProgram;
 	shaderProgram = glCreateProgram();
