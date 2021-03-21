@@ -73,6 +73,14 @@ int main()
 		 0.0f,  0.5f, 0.0f,
 	};
 
+	/* Use Vertex Array Object (VAOs) to store the Vertex configurations */
+	/* Create a VAO object */
+	unsigned int VAO;
+	glGenVertexArrays(1, &VAO);
+
+	/* Bind the VAO to use it */
+	glBindVertexArray(VAO);
+
 	/* Create Vertex Buffer Object (VBO) */
 	unsigned int VBO;
 	/* Generate buffer object with a buffer ID */
@@ -195,9 +203,6 @@ int main()
 		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
 	}
 
-	/* Activate the shader program */
-	glUseProgram(shaderProgram);
-
 	/* Delete the shader objects after linking, as we do not need this anymore */
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
@@ -222,6 +227,20 @@ int main()
 		/* Clear the screen and fill with color specified before (state-using function)*/
 		glClear(
 			GL_COLOR_BUFFER_BIT /* the Buffer you want to fill (we chose color buffer) */
+		);
+
+		/* Use/Activate the shader program */
+		glUseProgram(shaderProgram);
+
+		/* Bind the VAO to use it */
+		glBindVertexArray(VAO);
+
+		/* Start drawing using the currently acvite shader,
+		   the previously defined vertex attribute configuration and 
+		   with the VBO's vector data (indirectly bound via the VBO) */
+		glDrawArrays(GL_TRIANGLES, /* Primitive */
+			0, /* starting index of vertex array*/
+			3 /* num vertices */
 		);
 
 		/* Swaps the double buffers */
