@@ -161,6 +161,38 @@ int main()
 		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
+	/** SHADER PROGRAM **/
+
+	/* Create a Shader program object */
+	unsigned int shaderProgram;
+	shaderProgram = glCreateProgram();
+
+	/* Attach the shaders to the program and link it */
+	glAttachShader(shaderProgram, vertexShader);
+	glAttachShader(shaderProgram, fragmentShader);
+	glLinkProgram(shaderProgram);
+
+	/* Check linking status of the shader program */
+
+	/* This function returns a parameter from a shader object */
+	glGetProgramiv(shaderProgram,
+		GL_LINK_STATUS,
+		&success
+	);
+
+	if (!success)
+	{
+		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
+	}
+
+	/* Activate the shader program */
+	glUseProgram(shaderProgram);
+
+	/* Delete the shader objects after linking, as we do not need this anymore */
+	glDeleteShader(vertexShader);
+	glDeleteShader(fragmentShader);
+
 	/*********************/
 	/**** RENDER LOOP ****/
 	/*********************/
