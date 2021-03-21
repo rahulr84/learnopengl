@@ -88,6 +88,44 @@ int main()
 		GL_STATIC_DRAW /* How we want graphics card to manage the data */
 	);
 
+	/** VERTEX SHADER **/
+
+	/* Code Source */
+	const char* vertexShaderSource = "#version 330 core\n"
+		"layout(location = 0) in vec3 aPos; \n"
+		"void main()\n"
+		"{ \n"
+		"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0); \n"
+		"}\0";
+
+	/* Create a shader object */
+	unsigned int vertexShader;
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+	/* Attach the source code to shader object and compile (run-time) the shader */
+	glShaderSource(vertexShader,
+		1, /* Number of strings to pass*/
+		&vertexShaderSource,
+		NULL
+	);
+	glCompileShader(vertexShader);
+
+	/* Check compilation status */
+	int success;
+	char infoLog[512];
+
+	/* This function returns a parameter from a shader object */
+	glGetShaderiv(vertexShader,
+		GL_COMPILE_STATUS,
+		&success
+	);
+
+	if (!success)
+	{
+		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
 	/*********************/
 	/**** RENDER LOOP ****/
 	/*********************/
