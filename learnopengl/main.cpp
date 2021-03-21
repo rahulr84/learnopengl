@@ -69,6 +69,20 @@ int main()
 		/* User input through keys */
 		processInput(window);
 
+		/** Rendering commands **/
+
+		/* Specify the color you want to to clear the screen (state-setting function) */
+		glClearColor(
+			0.2f, /* R */
+			0.3f, /* G */
+			0.3f, /* B */
+			1.0f  /* A */
+		);
+		/* Clear the screen and fill with color specified before (state-using function)*/
+		glClear(
+			GL_COLOR_BUFFER_BIT /* the Buffer you want to fill (we chose color buffer) */
+		);
+
 		/* Swaps the double buffers */
 		glfwSwapBuffers(window);
 
