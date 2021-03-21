@@ -95,7 +95,7 @@ int main()
 		"layout(location = 0) in vec3 aPos; \n"
 		"void main()\n"
 		"{ \n"
-		"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0); \n"
+		"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f); \n"
 		"}\0";
 
 	/* Create a shader object */
@@ -124,6 +124,41 @@ int main()
 	{
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
 		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
+	}
+
+	/** FRAGMENT SHADER **/
+	/* Code Source */
+	const char* fragmentShaderSource = "#version 330 core\n"
+	"out vec4 FragColor; \n"
+	"void main()\n"
+	"{ \n"
+	"	FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n"
+	"}\0";
+
+	/* Create a shader object */
+	unsigned int fragmentShader;
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+	/* Attach the source code to shader object and compile (run-time) the shader */
+	glShaderSource(fragmentShader,
+		1, /* Number of strings to pass*/
+		&fragmentShaderSource,
+		NULL
+	);
+	glCompileShader(fragmentShader);
+
+	/* Check compilation status */
+
+	/* This function returns a parameter from a shader object */
+	glGetShaderiv(fragmentShader,
+		GL_COMPILE_STATUS,
+		&success
+	);
+
+	if (!success)
+	{
+		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
 	}
 
 	/*********************/
