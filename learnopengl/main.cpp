@@ -61,6 +61,33 @@ int main()
 	/* Set the callback function to GLFW */
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
+	/*********************************/
+	/**** SETUP GRAPHICS PIPELINE ****/
+	/*********************************/
+
+	/* Vertex Data :
+	   Normalized 3D device coordinates in the range between -1.0 and 1.0 */
+	float vertices[] = {
+		-0.5f, -0.5f, 0.0f, /* (x, y, z) */
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f,
+	};
+
+	/* Create Vertex Buffer Object (VBO) */
+	unsigned int VBO;
+	/* Generate buffer object with a buffer ID */
+	glGenBuffers(1, &VBO);
+
+	/* Bind the newly created buffer object to GL_ARRAY_BUFFER target */
+	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+
+	/* Copy the vertex data into the currently bound buffer's memory */
+	glBufferData(GL_ARRAY_BUFFER,
+		sizeof(vertices),
+		vertices,
+		GL_STATIC_DRAW /* How we want graphics card to manage the data */
+	);
+
 	/*********************/
 	/**** RENDER LOOP ****/
 	/*********************/
