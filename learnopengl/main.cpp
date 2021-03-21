@@ -39,5 +39,22 @@ int main()
 		return -1;
 	}
 
+	/*********************/
+	/**** RENDER LOOP ****/
+	/*********************/
+	while (!glfwWindowShouldClose(window))
+	{
+		/* Swaps the double buffers */
+		glfwSwapBuffers(window);
+
+		/* checks if any events are triggered (like keyboard or mouse events),
+		   updates the window state, and
+		   calls the corresponding functions via callback methods, which we can define. */
+		glfwPollEvents();
+	}
+
+	/* Properly clean/delete all of GLFW's resources that were allocated */
+	glfwTerminate();
+
 	return 0;
 }
