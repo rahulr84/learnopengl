@@ -2,6 +2,15 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+/* Function to process the user input using keys to the window */
+void processInput(GLFWwindow* window)
+{
+	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+	{
+		glfwSetWindowShouldClose(window, true);
+	}
+}
+
 /* Callback function to be used when a user resizes the window */
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
@@ -57,6 +66,9 @@ int main()
 	/*********************/
 	while (!glfwWindowShouldClose(window))
 	{
+		/* User input through keys */
+		processInput(window);
+
 		/* Swaps the double buffers */
 		glfwSwapBuffers(window);
 
