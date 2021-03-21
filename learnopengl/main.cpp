@@ -2,6 +2,16 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+/* Callback function to be used when a user resizes the window */
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+	/* Tell OpenGL the size of the rendering window, so that OpenGL knows how
+	   we want to display the data and coordinates w.r.t the window*/
+	glViewport(0, 0,    /* lower left corner of the rendering window */
+		800, 600 /* Width and Height of the rendering window*/
+	);
+}
+
 /* Main function */
 int main()
 {
@@ -38,6 +48,9 @@ int main()
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
+
+	/* Set the callback function to GLFW */
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
 	/*********************/
 	/**** RENDER LOOP ****/
