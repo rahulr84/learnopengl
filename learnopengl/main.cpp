@@ -4,6 +4,9 @@
 
 #include "shader.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 /* Function to process the user input using keys to the window */
 void processInput(GLFWwindow* window)
 {
@@ -130,6 +133,44 @@ int main()
 
 	/* Shader */
 	Shader ourShader("shader.vs", "shader.fs");
+
+	/* Use of Textures */
+	unsigned int texture;					// Create a variable to store the texture object
+	glGenTextures(1, &texture);				// Create texture object
+	glBindTexture(GL_TEXTURE_2D, texture);	// Bind the texture to use it 
+
+	/* Set the texture wrapping and filtering options on the currently bound texture */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	/* Load an image and generate the texture */
+	int width, height, numChannels;
+	unsigned char* texImage = stbi_load("container.jpg", &width, &height, &numChannels, 0);
+
+	if (texImage)
+	{
+		glTexImage2D(GL_TEXTURE_2D, // texture target
+			0, // mipmap level
+			GL_RGB, // texture storage format
+			width,
+			height,
+			0, // some legacy stuff
+			GL_RGB, // format of source image
+			GL_UNSIGNED_BYTE, // datatype of source image
+			texImage
+		);
+		glGenerateMipmap(GL_TEXTURE_2D); // Generate all the required mipmaps for the currently bound texture
+	}
+	else
+	{
+		std::cout << "Failed to load texture" << std::endl;
+	}
+
+	stbi_image_free(texImage); // free the image memory, after generating texture is done
+
+
 
 	/*********************/
 	/**** RENDER LOOP ****/
