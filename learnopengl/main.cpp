@@ -67,12 +67,24 @@ int main()
 
 	/* Vertex Data :
 	   Normalized 3D device coordinates in the range between -1.0 and 1.0 */
+#if 0 /* Triangle Vertices */
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f, /* (x, y, z) */
 		 0.5f, -0.5f, 0.0f,
 		 0.0f,  0.5f, 0.0f,
 	};
-
+#else /* Rectangle vertices and indices */
+	float vertices[] = {
+		 0.5f,  0.5f, 0.0f, // top right (index 0)
+		 0.5f, -0.5f, 0.0f, // bottom right (index 1)
+		-0.5f, -0.5f, 0.0f, // bottom left (index 2)
+		-0.5f,  0.5f, 0.0f, // top left (index 3)
+	};
+	unsigned int indices[] = {
+		0, 1, 3, // first triangle
+		1, 2, 3  // second triangle
+	};
+#endif
 	/* Use Vertex Array Object (VAOs) to store the Vertex configurations */
 	/* Create a VAO object */
 	unsigned int VAO;
