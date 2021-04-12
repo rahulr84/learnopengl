@@ -35,10 +35,12 @@ const char* vertexShaderSource = "#version 330 core\n"
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor; \n"
 "in vec4 vertexColor; \n "
+"uniform vec4 ourColor; \n"
 "void main()\n"
 "{ \n"
 "	//FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n"
-"	FragColor = vertexColor; \n"
+"	//FragColor = vertexColor; \n"
+"	FragColor = ourColor; \n"
 "}\0";
 
 /* Main function */
@@ -87,7 +89,7 @@ int main()
 
 	/* Vertex Data :
 	   Normalized 3D device coordinates in the range between -1.0 and 1.0 */
-#if 0 /* Triangle Vertices */
+#if 1 /* Triangle Vertices */
 	float vertices[] = {
 		-0.5f, -0.5f, 0.0f, /* (x, y, z) */
 		 0.5f, -0.5f, 0.0f,
@@ -252,6 +254,15 @@ int main()
 
 		/* Bind the VAO to use it */
 		glBindVertexArray(VAO);
+
+		/* Access and set the color in fragment shader */
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		/* set the color changing over time */
+		float timeValue = glfwGetTime();
+		//std::cout << "TimeValue : "<< timeValue << std::endl;
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		//std::cout << "greenValue : "<< greenValue << std::endl;
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
 		/* Start drawing using the currently acvite shader,
 		   the previously defined vertex attribute configuration and 
