@@ -72,7 +72,7 @@ int main()
 
 	/* Vertex Data :
 	   Normalized 3D device coordinates in the range between -1.0 and 1.0 */
-#if 1 /* Triangle Vertices */
+#if 0 /* Triangle Vertices */
 	float vertices[] = {
 		//positions         // colors
 		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
@@ -92,16 +92,22 @@ int main()
 	};
 #endif
 
+	/*********************************************************************/
+	/* 1. Create and bind Vertex Array Object (VAO)                      */
+	/*********************************************************************/
 	/* Use Vertex Array Object (VAOs) to store the Vertex configurations */
 	unsigned int VAO;			// Create a variable to store the VAO object
 	glGenVertexArrays(1, &VAO); // Generate array object
 	glBindVertexArray(VAO);		// Bind the VAO to use it 
 
+	/*********************************************************************/
+	/* 2. Create Vertex Buffer Object (VBO) and copy our vertices array  */
+	/*    to the VBO for OpenGL to use                                   */
+	/*********************************************************************/
 	/* Create Vertex Buffer Object (VBO) */
 	unsigned int VBO;					// Create a variable to store the VBO object
 	glGenBuffers(1, &VBO);				// Generate buffer object with a buffer ID 
 	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the newly created buffer object to GL_ARRAY_BUFFER target 
-
 	/* Copy the vertex data into the currently bound buffer's memory */
 	glBufferData(GL_ARRAY_BUFFER,
 		sizeof(vertices),
@@ -109,7 +115,24 @@ int main()
 		GL_STATIC_DRAW /* How we want graphics card to manage the data */
 	);
 
-	/* Linking Vertex Attributes */
+	/*********************************************************************/
+	/* 3. Create Element Buffer Object (EBO) and copy our indices array  */
+	/*    to the EBO for OpenGL to use                                   */
+	/*********************************************************************/
+	/* Create Element Buffer Object (EBO) */
+	unsigned int EBO;					// Create a variable to store the EBO object
+	glGenBuffers(1, &EBO);				// Generate buffer object with a buffer ID 
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind the newly created buffer object to GL_ELEMENT_ARRAY_BUFFER target 
+	/* Copy the vertex data into the currently bound buffer's memory */
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER,
+		sizeof(indices),
+		indices,
+		GL_STATIC_DRAW /* How we want graphics card to manage the data */
+	);
+
+	/*********************************************************************/
+	/* 4. Set and link Vertex Attribute pointers                         */
+	/*********************************************************************/
 	/* Position Attribute */
 	glVertexAttribPointer(0, /* layout (location=0) in Vertex shader */
 		3,			/* vec3 in vertex shader */
@@ -170,8 +193,6 @@ int main()
 
 	stbi_image_free(texImage); // free the image memory, after generating texture is done
 
-
-
 	/*********************/
 	/**** RENDER LOOP ****/
 	/*********************/
@@ -200,6 +221,7 @@ int main()
 		/* Use our shader */
 		ourShader.use();
 
+#if 0
 		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
 		   with the VBO's vector data (indirectly bound via the VBO) */
@@ -207,6 +229,13 @@ int main()
 			0, /* starting index of vertex array*/
 			3 /* num vertices */
 		);
+#else
+		glDrawElements(GL_TRIANGLES, /* Primitive */
+			6, /* number of elements we would like to draw (total number of indices) */
+			GL_UNSIGNED_INT, // type of indices
+			0 /* offset */
+		);
+#endif
 
 		/* Swaps the double buffers */
 		glfwSwapBuffers(window);
