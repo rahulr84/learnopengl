@@ -107,21 +107,16 @@ int main()
 		1, 2, 3  // second triangle
 	};
 #endif
-	/* Use Vertex Array Object (VAOs) to store the Vertex configurations */
-	/* Create a VAO object */
-	unsigned int VAO;
-	glGenVertexArrays(1, &VAO);
 
-	/* Bind the VAO to use it */
-	glBindVertexArray(VAO);
+	/* Use Vertex Array Object (VAOs) to store the Vertex configurations */
+	unsigned int VAO;			// Create a variable to store the VAO object
+	glGenVertexArrays(1, &VAO); // Generate array object
+	glBindVertexArray(VAO);		// Bind the VAO to use it 
 
 	/* Create Vertex Buffer Object (VBO) */
-	unsigned int VBO;
-	/* Generate buffer object with a buffer ID */
-	glGenBuffers(1, &VBO);
-
-	/* Bind the newly created buffer object to GL_ARRAY_BUFFER target */
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	unsigned int VBO;					// Create a variable to store the VBO object
+	glGenBuffers(1, &VBO);				// Generate buffer object with a buffer ID 
+	glBindBuffer(GL_ARRAY_BUFFER, VBO); // Bind the newly created buffer object to GL_ARRAY_BUFFER target 
 
 	/* Copy the vertex data into the currently bound buffer's memory */
 	glBufferData(GL_ARRAY_BUFFER,
@@ -136,17 +131,14 @@ int main()
 		GL_FLOAT,	/* vec* in GLSL is a float */
 		GL_FALSE,	/* Normalize? not required for float, only for int*/
 		3 * sizeof(float), /* stride (space between consecutive vertex attributes) */
-		(void*)0 /* offset of where the position data begins in buffer */
+		(void*) 0 /* offset of where the position data begins in buffer */
 	);
-	glEnableVertexAttribArray(0 /* vertex attribute location */
+	glEnableVertexAttribArray(0 /* vertex attribute location (layout (location=0) in Vertex shader) */
 	);
 
 	/** VERTEX SHADER **/
-
-	/* Create a shader object */
-	unsigned int vertexShader;
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-
+	unsigned int vertexShader;							// Create a variable to store the vertexShader object
+	vertexShader = glCreateShader(GL_VERTEX_SHADER);	// Generate/Create vertexShader object
 	/* Attach the source code to shader object and compile (run-time) the shader */
 	glShaderSource(vertexShader,
 		1, /* Number of strings to pass*/
@@ -154,17 +146,14 @@ int main()
 		NULL
 	);
 	glCompileShader(vertexShader);
-
 	/* Check compilation status */
 	int success;
 	char infoLog[512];
-
 	/* This function returns a parameter from a shader object */
 	glGetShaderiv(vertexShader,
 		GL_COMPILE_STATUS,
 		&success
 	);
-
 	if (!success)
 	{
 		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
@@ -172,11 +161,8 @@ int main()
 	}
 
 	/** FRAGMENT SHADER **/
-
-	/* Create a shader object */
-	unsigned int fragmentShader;
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-
+	unsigned int fragmentShader;						// Create a variable to store the fragmentShader object
+	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);// Generate/Create fragmentShader object
 	/* Attach the source code to shader object and compile (run-time) the shader */
 	glShaderSource(fragmentShader,
 		1, /* Number of strings to pass*/
@@ -184,15 +170,12 @@ int main()
 		NULL
 	);
 	glCompileShader(fragmentShader);
-
 	/* Check compilation status */
-
 	/* This function returns a parameter from a shader object */
 	glGetShaderiv(fragmentShader,
 		GL_COMPILE_STATUS,
 		&success
 	);
-
 	if (!success)
 	{
 		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
@@ -200,23 +183,18 @@ int main()
 	}
 
 	/** SHADER PROGRAM **/
-	/* Create a Shader program object */
-	unsigned int shaderProgram;
-	shaderProgram = glCreateProgram();
-
+	unsigned int shaderProgram;			// Create a variable to store the shaderProgram object
+	shaderProgram = glCreateProgram();	// Generate/Create shaderProgram object
 	/* Attach the shaders to the program and link it */
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragmentShader);
 	glLinkProgram(shaderProgram);
-
 	/* Check linking status of the shader program */
-
 	/* This function returns a parameter from a shader object */
 	glGetProgramiv(shaderProgram,
 		GL_LINK_STATUS,
 		&success
 	);
-
 	if (!success)
 	{
 		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
@@ -264,7 +242,7 @@ int main()
 		//std::cout << "greenValue : "<< greenValue << std::endl;
 		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 
-		/* Start drawing using the currently acvite shader,
+		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
 		   with the VBO's vector data (indirectly bound via the VBO) */
 		glDrawArrays(GL_TRIANGLES, /* Primitive */
