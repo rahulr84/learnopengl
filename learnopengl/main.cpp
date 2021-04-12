@@ -23,24 +23,25 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 
 /* Vertex Shader Code Source */
 const char* vertexShaderSource = "#version 330 core\n"
-"layout(location = 0) in vec3 aPos; \n"
-"out vec4 vertexColor; // specify a color output to the Fragment shader \n"
+"layout(location = 0) in vec3 aPos; // position has attribute location 0 \n"
+"layout(location = 1) in vec3 aColor; // color has attribute location 1 \n"
+"out vec3 ourColor; // specify a color output to the Fragment shader \n"
 "void main()\n"
 "{ \n"
 "	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f); \n"
-"   vertexColor = vec4(0.5f, 0.0f, 0.0f, 0.0f); // output variable to dark red \n"
+"   ourColor = aColor; //set ourColor to the input color from the vertex data \n"
 "}\0";
 
 /* Fragement Shader Code Source */
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor; \n"
-"in vec4 vertexColor; \n "
-"uniform vec4 ourColor; \n"
+"in vec3 ourColor; \n "
+"//uniform vec4 ourColor; \n"
 "void main()\n"
 "{ \n"
 "	//FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n"
 "	//FragColor = vertexColor; \n"
-"	FragColor = ourColor; \n"
+"	FragColor = vec4(ourColor, 1.0f); \n"
 "}\0";
 
 /* Main function */
@@ -91,9 +92,10 @@ int main()
 	   Normalized 3D device coordinates in the range between -1.0 and 1.0 */
 #if 1 /* Triangle Vertices */
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f, /* (x, y, z) */
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f,
+		//positions         // colors
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+		-0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
+		 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // top
 	};
 #else /* Rectangle vertices and indices */
 	float vertices[] = {
@@ -126,14 +128,25 @@ int main()
 	);
 
 	/* Linking Vertex Attributes */
+	/* Position Attribute */
 	glVertexAttribPointer(0, /* layout (location=0) in Vertex shader */
 		3,			/* vec3 in vertex shader */
 		GL_FLOAT,	/* vec* in GLSL is a float */
 		GL_FALSE,	/* Normalize? not required for float, only for int*/
-		3 * sizeof(float), /* stride (space between consecutive vertex attributes) */
-		(void*) 0 /* offset of where the position data begins in buffer */
+		6 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
+		(void*)0 /* OFFSET of where the position data begins in buffer */
 	);
 	glEnableVertexAttribArray(0 /* vertex attribute location (layout (location=0) in Vertex shader) */
+	);
+	/* Color Attribute */
+	glVertexAttribPointer(1, /* layout (location=1) in Vertex shader */
+		3,			/* vec3 in vertex shader */
+		GL_FLOAT,	/* vec* in GLSL is a float */
+		GL_FALSE,	/* Normalize? not required for float, only for int*/
+		6 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
+		(void*)(3 * sizeof(float)) /* OFFSET of where the position data begins in buffer */
+	);
+	glEnableVertexAttribArray(1 /* vertex attribute location (layout (location=1) in Vertex shader) */
 	);
 
 	/** VERTEX SHADER **/
