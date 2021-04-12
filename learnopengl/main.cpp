@@ -23,29 +23,6 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	);
 }
 
-/* Vertex Shader Code Source */
-const char* vertexShaderSource = "#version 330 core\n"
-"layout(location = 0) in vec3 aPos; // position has attribute location 0 \n"
-"layout(location = 1) in vec3 aColor; // color has attribute location 1 \n"
-"out vec3 ourColor; // specify a color output to the Fragment shader \n"
-"void main()\n"
-"{ \n"
-"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f); \n"
-"   ourColor = aColor; //set ourColor to the input color from the vertex data \n"
-"}\0";
-
-/* Fragement Shader Code Source */
-const char* fragmentShaderSource = "#version 330 core\n"
-"out vec4 FragColor; \n"
-"in vec3 ourColor; \n "
-"//uniform vec4 ourColor; \n"
-"void main()\n"
-"{ \n"
-"	//FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f); \n"
-"	//FragColor = vertexColor; \n"
-"	FragColor = vec4(ourColor, 1.0f); \n"
-"}\0";
-
 /* Main function */
 int main()
 {
@@ -151,74 +128,8 @@ int main()
 	glEnableVertexAttribArray(1 /* vertex attribute location (layout (location=1) in Vertex shader) */
 	);
 
-	/** VERTEX SHADER **/
-	unsigned int vertexShader;							// Create a variable to store the vertexShader object
-	vertexShader = glCreateShader(GL_VERTEX_SHADER);	// Generate/Create vertexShader object
-	/* Attach the source code to shader object and compile (run-time) the shader */
-	glShaderSource(vertexShader,
-		1, /* Number of strings to pass*/
-		&vertexShaderSource,
-		NULL
-	);
-	glCompileShader(vertexShader);
-	/* Check compilation status */
-	int success;
-	char infoLog[512];
-	/* This function returns a parameter from a shader object */
-	glGetShaderiv(vertexShader,
-		GL_COMPILE_STATUS,
-		&success
-	);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	/** FRAGMENT SHADER **/
-	unsigned int fragmentShader;						// Create a variable to store the fragmentShader object
-	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);// Generate/Create fragmentShader object
-	/* Attach the source code to shader object and compile (run-time) the shader */
-	glShaderSource(fragmentShader,
-		1, /* Number of strings to pass*/
-		&fragmentShaderSource,
-		NULL
-	);
-	glCompileShader(fragmentShader);
-	/* Check compilation status */
-	/* This function returns a parameter from a shader object */
-	glGetShaderiv(fragmentShader,
-		GL_COMPILE_STATUS,
-		&success
-	);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	/** SHADER PROGRAM **/
-	unsigned int shaderProgram;			// Create a variable to store the shaderProgram object
-	shaderProgram = glCreateProgram();	// Generate/Create shaderProgram object
-	/* Attach the shaders to the program and link it */
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	/* Check linking status of the shader program */
-	/* This function returns a parameter from a shader object */
-	glGetProgramiv(shaderProgram,
-		GL_LINK_STATUS,
-		&success
-	);
-	if (!success)
-	{
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
-	/* Delete the shader objects after linking, as we do not need this anymore */
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
+	/* Shader */
+	Shader ourShader("shader.vs", "shader.fs");
 
 	/*********************/
 	/**** RENDER LOOP ****/
@@ -242,20 +153,11 @@ int main()
 			GL_COLOR_BUFFER_BIT /* the Buffer you want to fill (we chose color buffer) */
 		);
 
-		/* Use/Activate the shader program */
-		glUseProgram(shaderProgram);
-
 		/* Bind the VAO to use it */
 		glBindVertexArray(VAO);
 
-		/* Access and set the color in fragment shader */
-		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
-		/* set the color changing over time */
-		float timeValue = (float)glfwGetTime();
-		//std::cout << "TimeValue : "<< timeValue << std::endl;
-		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		//std::cout << "greenValue : "<< greenValue << std::endl;
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		/* Use our shader */
+		ourShader.use();
 
 		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
