@@ -2,6 +2,8 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
+#include "shader.h"
+
 /* Function to process the user input using keys to the window */
 void processInput(GLFWwindow* window)
 {
@@ -249,7 +251,7 @@ int main()
 		/* Access and set the color in fragment shader */
 		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
 		/* set the color changing over time */
-		float timeValue = glfwGetTime();
+		float timeValue = (float)glfwGetTime();
 		//std::cout << "TimeValue : "<< timeValue << std::endl;
 		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
 		//std::cout << "greenValue : "<< greenValue << std::endl;
