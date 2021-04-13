@@ -339,6 +339,9 @@ int main()
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 #endif
 
+	// Enable Depth test using Z buffer or Depth buffer
+	glEnable(GL_DEPTH_TEST);
+
 	/*********************************************************************/
 	/* 8. RENDER LOOP                                                    */
 	/*********************************************************************/
@@ -358,7 +361,8 @@ int main()
 		);
 		/* Clear the screen and fill with color specified before (state-using function)*/
 		glClear(
-			GL_COLOR_BUFFER_BIT /* the Buffer you want to fill (we chose color buffer) */
+			GL_COLOR_BUFFER_BIT |/* the Buffer you want to fill (we chose color buffer) */ \
+			GL_DEPTH_BUFFER_BIT /* For Depth testing */
 		);
 
 		/* Activate and bind first texture */
