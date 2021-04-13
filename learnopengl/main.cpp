@@ -11,7 +11,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
 
-#define LEARN_GLM
+//#define LEARN_GLM
 
 /* Function to process the user input using keys to the window */
 void processInput(GLFWwindow* window)
@@ -267,8 +267,31 @@ int main()
 
 	stbi_image_free(texImage2); // free the image memory, after generating texture is done
 
+	/* Tell OpenGL to which texture each shader sampler belongs to */
+	ourShader.use();
+	ourShader.setInt("texture1", 0);
+	ourShader.setInt("texture2", 1);
+
 	/*********************************************************************/
-	/* 7. RENDER LOOP                                                    */
+	/* 7. Transformations                                                */
+	/*********************************************************************/
+#if 1 
+	glm::mat4 trans = glm::mat4(1.0f); // Initialize 4x4 matrix as Identity matrix
+	// Rotate 90 deg around the Z axis
+	trans = glm::rotate(trans,		// Transformation matrix
+		glm::radians(90.0f),		// Degree in radians
+		glm::vec3(0.0, 0.0, 1.0) // Axis of rotation (Z axis)
+	); 
+	// Scale by 0.5 on each axis
+	trans = glm::scale(trans,		// Transformation matrix
+		glm::vec3(0.5, 0.5, 0.5) // scale factor for each axis
+	);
+	// Pass the transformation matrix to the vertex shader
+	unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+#endif
+	/*********************************************************************/
+	/* 8. RENDER LOOP                                                    */
 	/*********************************************************************/
 	while (!glfwWindowShouldClose(window))
 	{
@@ -301,10 +324,6 @@ int main()
 
 		/* Use our shader */
 		ourShader.use();
-		/* Tell OpenGL to which texture each shader sampler belongs to */
-		ourShader.setInt("texture1", 0);
-		ourShader.setInt("texture2", 1);
-
 #if 0
 		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
