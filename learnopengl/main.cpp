@@ -185,7 +185,7 @@ int main()
 
 	/* Load an image and generate the texture */
 	int width, height, numChannels;
-	unsigned char* texImage = stbi_load("C:\Rahul\work\ADAS\study\learnopengl\code\learnopengl\resources\textures\container.jpg", &width, &height, &numChannels, 0);
+	unsigned char* texImage = stbi_load("..\\resources\\textures\\container.jpg", &width, &height, &numChannels, 0);
 
 	if (texImage)
 	{
