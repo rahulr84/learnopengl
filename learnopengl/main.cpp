@@ -157,6 +157,19 @@ int main()
 		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
 		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f
 	};
+	// world space positions of our cubes
+	glm::vec3 cubePositions[] = {
+		glm::vec3( 0.0f,  0.0f,  0.0f ),
+		glm::vec3( 2.0f,  5.0f, -15.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f ),
+		glm::vec3(-3.8f, -2.0f, -12.3f),
+		glm::vec3( 2.4f, -0.4f, -3.5f ),
+		glm::vec3(-1.7f,  3.0f, -7.5f ),
+		glm::vec3( 1.3f, -2.0f, -2.5f ),
+		glm::vec3( 1.5f,  2.0f, -2.5f ),
+		glm::vec3( 1.5f,  0.2f, -1.5f ),
+		glm::vec3(-1.3f,  1.0f, -1.5f )
+	};
 #endif
 #endif
 
@@ -396,12 +409,6 @@ int main()
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 #else 
 		/* Transformation which looks like the object is laying on the floor */
-		// Model Matrix
-		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f, 1.0f, 1.0f)); // Rotate on multiple axis time*-55 degrees for Cube
-		unsigned int transformLocModel = glGetUniformLocation(ourShader.ID, "model");
-		glUniformMatrix4fv(transformLocModel, 1, GL_FALSE, glm::value_ptr(model));
-
 		// View Matrix
 		glm::mat4 view = glm::mat4(1.0f);
 		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); // Move the scene on Z axis in reverse direction
@@ -413,16 +420,32 @@ int main()
 		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
 		unsigned int transformLocProj = glGetUniformLocation(ourShader.ID, "projection");
 		glUniformMatrix4fv(transformLocProj, 1, GL_FALSE, glm::value_ptr(projection));
+
+		// Model Matrix
+		// For loop to access each cube according to its position
+		for (unsigned int i = 0; i < 10; i++)
+		{
+			glm::mat4 model = glm::mat4(1.0f);
+			model = glm::translate(model, cubePositions[i]);
+			model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f, 1.0f, 1.0f)); // Rotate on multiple axis time*-55 degrees for Cube
+			unsigned int transformLocModel = glGetUniformLocation(ourShader.ID, "model");
+			glUniformMatrix4fv(transformLocModel, 1, GL_FALSE, glm::value_ptr(model));
+
+			glDrawArrays(GL_TRIANGLES, /* Primitive */
+				0, /* starting index of vertex array*/
+				36 /* num vertices for Cube */
+			);
+		}
 #endif
 
 #if 1
 		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
 		   with the VBO's vector data (indirectly bound via the VBO) */
-		glDrawArrays(GL_TRIANGLES, /* Primitive */
-			0, /* starting index of vertex array*/
-			36 /* num vertices for Cube */
-		);
+		//glDrawArrays(GL_TRIANGLES, /* Primitive */
+		//	0, /* starting index of vertex array*/
+		//	36 /* num vertices for Cube */
+		//);
 #else
 		glDrawElements(GL_TRIANGLES, /* Primitive */
 			6, /* number of elements we would like to draw (total number of indices) */
