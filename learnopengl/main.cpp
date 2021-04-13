@@ -275,7 +275,7 @@ int main()
 	/*********************************************************************/
 	/* 7. Transformations                                                */
 	/*********************************************************************/
-#if 1 
+#if 0 //  Keep the transformation inside the render loop to change every frame 
 	glm::mat4 trans = glm::mat4(1.0f); // Initialize 4x4 matrix as Identity matrix
 	// Rotate 90 deg around the Z axis
 	trans = glm::rotate(trans,		// Transformation matrix
@@ -290,6 +290,7 @@ int main()
 	unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
 	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 #endif
+
 	/*********************************************************************/
 	/* 8. RENDER LOOP                                                    */
 	/*********************************************************************/
@@ -324,6 +325,24 @@ int main()
 
 		/* Use our shader */
 		ourShader.use();
+
+		/* Transformation */
+		glm::mat4 trans = glm::mat4(1.0f); // Initialize 4x4 matrix as Identity matrix
+		// Translation on each axis
+		trans = glm::translate(trans,		// Transformation matrix
+			glm::vec3(0.5f, -0.5f, 0.0f) // translate  factor for each axis
+		);
+		// Rotate 90 deg around the Z axis
+		trans = glm::rotate(trans,		// Transformation matrix
+			(float)glfwGetTime(),		// Degree in radians (pass the time)
+			glm::vec3(0.0f, 0.0f, 1.0f) // Axis of rotation (Z axis)
+		);
+
+
+		// Pass the transformation matrix to the vertex shader
+		unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
+		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+
 #if 0
 		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
