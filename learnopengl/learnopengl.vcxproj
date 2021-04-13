@@ -70,8 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>C:\Rahul\work\ADAS\study\learnopengl\code\thirdparty\include;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Rahul\work\ADAS\study\learnopengl\code\thirdparty\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\..\thirdparty\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\..\thirdparty\libs;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
