@@ -327,6 +327,7 @@ int main()
 		ourShader.use();
 
 		/* Transformation */
+#if 0
 		glm::mat4 trans = glm::mat4(1.0f); // Initialize 4x4 matrix as Identity matrix
 		// Translation on each axis
 		trans = glm::translate(trans,		// Transformation matrix
@@ -338,10 +339,29 @@ int main()
 			glm::vec3(0.0f, 0.0f, 1.0f) // Axis of rotation (Z axis)
 		);
 
-
 		// Pass the transformation matrix to the vertex shader
 		unsigned int transformLoc = glGetUniformLocation(ourShader.ID, "transform");
 		glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+#else 
+		/* Transformation which looks like the object is laying on the floor */
+		// Model Matrix
+		glm::mat4 model = glm::mat4(1.0f);
+		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Rotate on X axis -55 degrees
+		unsigned int transformLocModel = glGetUniformLocation(ourShader.ID, "model");
+		glUniformMatrix4fv(transformLocModel, 1, GL_FALSE, glm::value_ptr(model));
+
+		// View Matrix
+		glm::mat4 view = glm::mat4(1.0f);
+		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f)); // Move the scene on Z axis in reverse direction
+		unsigned int transformLocView = glGetUniformLocation(ourShader.ID, "view");
+		glUniformMatrix4fv(transformLocView, 1, GL_FALSE, glm::value_ptr(view));
+
+		// Projection Matrix
+		glm::mat4 projection = glm::mat4(1.0f);
+		projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+		unsigned int transformLocProj = glGetUniformLocation(ourShader.ID, "projection");
+		glUniformMatrix4fv(transformLocProj, 1, GL_FALSE, glm::value_ptr(projection));
+#endif
 
 #if 0
 		/* Start drawing using the currently active shader,
