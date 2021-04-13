@@ -3,11 +3,15 @@
 #include <GLFW/glfw3.h>
 
 #include "glm/glm.hpp"
+#include "glm/gtc/matrix_transform.hpp"
+#include "glm/gtc/type_ptr.hpp"
 
 #include "shader.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include "stb_image.h"
+
+#define LEARN_GLM
 
 /* Function to process the user input using keys to the window */
 void processInput(GLFWwindow* window)
@@ -28,6 +32,20 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 	);
 }
 
+#ifdef LEARN_GLM
+/* Main function for GLM operations */
+int main()
+{
+	/* Translate a vector (1, 0, 0) by (1, 1, 0) */
+	glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f); // Input vector
+	glm::mat4 trans = glm::mat4(1.0f); // Initialize 4x4 matrix as Identity matrix
+	trans = glm::translate(trans, glm::vec3(1.0f, 1.0f, 0.0f)); // Create transformation matrix using translation vector (1, 1, 0)
+	vec = trans * vec; // Output the transformed vector
+	std::cout << vec.x << vec.y << vec.z << std::endl;
+
+	return 0;
+}
+#else
 /* Main function */
 int main()
 {
@@ -317,3 +335,4 @@ int main()
 
 	return 0;
 }
+#endif
