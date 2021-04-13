@@ -81,10 +81,11 @@ int main()
 	};
 #else /* Rectangle vertices and indices */
 	float vertices[] = {
-		 0.5f,  0.5f, 0.0f, // top right (index 0)
-		 0.5f, -0.5f, 0.0f, // bottom right (index 1)
-		-0.5f, -0.5f, 0.0f, // bottom left (index 2)
-		-0.5f,  0.5f, 0.0f, // top left (index 3)
+		//positions           // colors           // tex coords
+		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right (index 0)
+		 0.5f, -0.5f, 0.0f,   0.0f, 1.0f, 0.0f,   1.0f, 0.0f, // bottom right (index 1)
+		-0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f, // bottom left (index 2)
+		-0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f, // top left (index 3)
 	};
 	unsigned int indices[] = {
 		0, 1, 3, // first triangle
@@ -138,7 +139,7 @@ int main()
 		3,			/* vec3 in vertex shader */
 		GL_FLOAT,	/* vec* in GLSL is a float */
 		GL_FALSE,	/* Normalize? not required for float, only for int*/
-		6 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
+		8 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
 		(void*)0 /* OFFSET of where the position data begins in buffer */
 	);
 	glEnableVertexAttribArray(0 /* vertex attribute location (layout (location=0) in Vertex shader) */
@@ -148,16 +149,30 @@ int main()
 		3,			/* vec3 in vertex shader */
 		GL_FLOAT,	/* vec* in GLSL is a float */
 		GL_FALSE,	/* Normalize? not required for float, only for int*/
-		6 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
+		8 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
 		(void*)(3 * sizeof(float)) /* OFFSET of where the position data begins in buffer */
 	);
 	glEnableVertexAttribArray(1 /* vertex attribute location (layout (location=1) in Vertex shader) */
 	);
+	/* Texture coordinate Attribute */
+	glVertexAttribPointer(2, /* layout (location=2) in Vertex shader */
+		3,			/* vec3 in vertex shader */
+		GL_FLOAT,	/* vec* in GLSL is a float */
+		GL_FALSE,	/* Normalize? not required for float, only for int*/
+		8 * sizeof(float), /* STRIDE (space between consecutive vertex attributes) */
+		(void*)(6 * sizeof(float)) /* OFFSET of where the position data begins in buffer */
+	);
+	glEnableVertexAttribArray(2 /* vertex attribute location (layout (location=2) in Vertex shader) */
+	);
 
-	/* Shader */
+	/*********************************************************************/
+	/* 5. Create shaders and use this in Render loop below               */
+	/*********************************************************************/
 	Shader ourShader("shader.vs", "shader.fs");
 
-	/* Use of Textures */
+	/*********************************************************************/
+	/* 6. Load and create a texture                                      */
+	/*********************************************************************/
 	unsigned int texture;					// Create a variable to store the texture object
 	glGenTextures(1, &texture);				// Create texture object
 	glBindTexture(GL_TEXTURE_2D, texture);	// Bind the texture to use it 
@@ -170,7 +185,7 @@ int main()
 
 	/* Load an image and generate the texture */
 	int width, height, numChannels;
-	unsigned char* texImage = stbi_load("container.jpg", &width, &height, &numChannels, 0);
+	unsigned char* texImage = stbi_load("C:\Rahul\work\ADAS\study\learnopengl\code\learnopengl\resources\textures\container.jpg", &width, &height, &numChannels, 0);
 
 	if (texImage)
 	{
@@ -193,9 +208,9 @@ int main()
 
 	stbi_image_free(texImage); // free the image memory, after generating texture is done
 
-	/*********************/
-	/**** RENDER LOOP ****/
-	/*********************/
+	/*********************************************************************/
+	/* 7. RENDER LOOP                                                    */
+	/*********************************************************************/
 	while (!glfwWindowShouldClose(window))
 	{
 		/* User input through keys */
@@ -214,6 +229,9 @@ int main()
 		glClear(
 			GL_COLOR_BUFFER_BIT /* the Buffer you want to fill (we chose color buffer) */
 		);
+
+		/* Bind the texture */
+		glBindTexture(GL_TEXTURE_2D, texture);
 
 		/* Bind the VAO to use it */
 		glBindVertexArray(VAO);
