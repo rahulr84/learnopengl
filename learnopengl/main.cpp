@@ -100,6 +100,7 @@ int main()
 		 0.0f,  0.5f, 0.0f, 0.0f, 0.0f, 1.0f, // top
 	};
 #else /* Rectangle vertices and indices */
+#if 0
 	float vertices[] = {
 		//positions           // colors           // tex coords
 		 0.5f,  0.5f, 0.0f,   1.0f, 0.0f, 0.0f,   1.0f, 1.0f, // top right (index 0)
@@ -111,6 +112,52 @@ int main()
 		0, 1, 3, // first triangle
 		1, 2, 3  // second triangle
 	};
+#else /* Cube */
+	float vertices[] = {
+		//positions           // colors          // tex coords
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 0.0f, 0.0f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f, 1.0f, 0.0f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f, 1.0f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f, 0.0f,  0.0f, 1.0f
+	};
+#endif
 #endif
 
 	/*********************************************************************/
@@ -141,6 +188,7 @@ int main()
 	/*    to the EBO for OpenGL to use                                   */
 	/*********************************************************************/
 	/* Create Element Buffer Object (EBO) */
+#if 0 /* undefine this for Cube program */
 	unsigned int EBO;					// Create a variable to store the EBO object
 	glGenBuffers(1, &EBO);				// Generate buffer object with a buffer ID 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO); // Bind the newly created buffer object to GL_ELEMENT_ARRAY_BUFFER target 
@@ -150,7 +198,7 @@ int main()
 		indices,
 		GL_STATIC_DRAW /* How we want graphics card to manage the data */
 	);
-
+#endif
 	/*********************************************************************/
 	/* 4. Set and link Vertex Attribute pointers                         */
 	/*********************************************************************/
@@ -346,7 +394,7 @@ int main()
 		/* Transformation which looks like the object is laying on the floor */
 		// Model Matrix
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f)); // Rotate on X axis -55 degrees
+		model = glm::rotate(model, (float)glfwGetTime() * glm::radians(-55.0f), glm::vec3(0.5f, 1.0f, 1.0f)); // Rotate on multiple axis time*-55 degrees for Cube
 		unsigned int transformLocModel = glGetUniformLocation(ourShader.ID, "model");
 		glUniformMatrix4fv(transformLocModel, 1, GL_FALSE, glm::value_ptr(model));
 
@@ -363,13 +411,13 @@ int main()
 		glUniformMatrix4fv(transformLocProj, 1, GL_FALSE, glm::value_ptr(projection));
 #endif
 
-#if 0
+#if 1
 		/* Start drawing using the currently active shader,
 		   the previously defined vertex attribute configuration and 
 		   with the VBO's vector data (indirectly bound via the VBO) */
 		glDrawArrays(GL_TRIANGLES, /* Primitive */
 			0, /* starting index of vertex array*/
-			3 /* num vertices */
+			36 /* num vertices for Cube */
 		);
 #else
 		glDrawElements(GL_TRIANGLES, /* Primitive */
