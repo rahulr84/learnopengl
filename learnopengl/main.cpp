@@ -173,9 +173,10 @@ int main()
 	/*********************************************************************/
 	/* 6. Load and create a texture                                      */
 	/*********************************************************************/
-	unsigned int texture;					// Create a variable to store the texture object
-	glGenTextures(1, &texture);				// Create texture object
-	glBindTexture(GL_TEXTURE_2D, texture);	// Bind the texture to use it 
+	/* TEXTURE 1 */
+	unsigned int texture1;					// Create a variable to store the texture object
+	glGenTextures(1, &texture1);			// Create texture object
+	glBindTexture(GL_TEXTURE_2D, texture1);	// Bind the texture to use it 
 
 	/* Set the texture wrapping and filtering options on the currently bound texture */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -184,29 +185,67 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
 	/* Load an image and generate the texture */
-	int width, height, numChannels;
-	unsigned char* texImage = stbi_load("..\\resources\\textures\\container.jpg", &width, &height, &numChannels, 0);
+	int width1, height1, numChannels1;
+	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+	unsigned char* texImage1 = stbi_load("..\\resources\\textures\\container.jpg", &width1, &height1, &numChannels1, 0);
 
-	if (texImage)
+	if (texImage1)
 	{
 		glTexImage2D(GL_TEXTURE_2D, // texture target
 			0, // mipmap level
 			GL_RGB, // texture storage format
-			width,
-			height,
+			width1,
+			height1,
 			0, // some legacy stuff
 			GL_RGB, // format of source image
 			GL_UNSIGNED_BYTE, // datatype of source image
-			texImage
+			texImage1
 		);
 		glGenerateMipmap(GL_TEXTURE_2D); // Generate all the required mipmaps for the currently bound texture
 	}
 	else
 	{
-		std::cout << "Failed to load texture" << std::endl;
+		std::cout << "Failed to load texture1" << std::endl;
 	}
 
-	stbi_image_free(texImage); // free the image memory, after generating texture is done
+	stbi_image_free(texImage1); // free the image memory, after generating texture is done
+
+	/* TEXTURE 2 */
+	unsigned int texture2;					// Create a variable to store the texture object
+	glGenTextures(1, &texture2);			// Create texture object
+	glBindTexture(GL_TEXTURE_2D, texture2);	// Bind the texture to use it 
+
+	/* Set the texture wrapping and filtering options on the currently bound texture */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	/* Load an image and generate the texture */
+	int width2, height2, numChannels2;
+	stbi_set_flip_vertically_on_load(true); // tell stb_image.h to flip loaded texture's on the y-axis.
+	unsigned char* texImage2 = stbi_load("..\\resources\\textures\\awesomeface.png", &width2, &height2, &numChannels2, 0);
+
+	if (texImage2)
+	{
+		glTexImage2D(GL_TEXTURE_2D, // texture target
+			0, // mipmap level
+			GL_RGB, // texture storage format
+			width2,
+			height2,
+			0, // some legacy stuff
+			GL_RGBA, // format of source image
+			GL_UNSIGNED_BYTE, // datatype of source image
+			texImage2
+		);
+		glGenerateMipmap(GL_TEXTURE_2D); // Generate all the required mipmaps for the currently bound texture
+	}
+	else
+	{
+		std::cout << "Failed to load texture2" << std::endl;
+	}
+
+	stbi_image_free(texImage2); // free the image memory, after generating texture is done
 
 	/*********************************************************************/
 	/* 7. RENDER LOOP                                                    */
@@ -230,14 +269,21 @@ int main()
 			GL_COLOR_BUFFER_BIT /* the Buffer you want to fill (we chose color buffer) */
 		);
 
-		/* Bind the texture */
-		glBindTexture(GL_TEXTURE_2D, texture);
+		/* Activate and bind first texture */
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture1);
+		/* Activate and bind second texture */
+		glActiveTexture(GL_TEXTURE1);
+		glBindTexture(GL_TEXTURE_2D, texture2);
 
 		/* Bind the VAO to use it */
 		glBindVertexArray(VAO);
 
 		/* Use our shader */
 		ourShader.use();
+		/* Tell OpenGL to which texture each shader sampler belongs to */
+		ourShader.setInt("texture1", 0);
+		ourShader.setInt("texture2", 1);
 
 #if 0
 		/* Start drawing using the currently active shader,
